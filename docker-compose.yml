@@ -1,0 +1,29 @@
+services:
+  backend:
+    build:
+      context: ./fastapi-demo
+      dockerfile: Dockerfile
+    container_name: fastapi_app
+    ports:
+      - "8000:8000"
+    environment:
+      - POETRY_VIRTUALENVS_CREATE=false
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: ./react-demo
+      dockerfile: Dockerfile
+    container_name: react_app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+    environment:
+      - REACT_APP_BACKEND_URL=http://localhost:8000
+
+networks:
+  app-network:
